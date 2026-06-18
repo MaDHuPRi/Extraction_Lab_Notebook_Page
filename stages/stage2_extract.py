@@ -83,44 +83,69 @@ Return as JSON:
 }""",
 
     ZoneType.MATH: """This is a mathematical calculation section from a handwritten chemistry lab notebook.
-Extract EVERY equation, calculation, and numerical result. Pay extreme attention to:
-- Exponents and subscripts: cm², mA, Li⁺, e⁻
-- Scientific notation: "1.5E-4" means 1.5×10⁻⁴
-- Units at each step of the calculation
-- The final numerical result with units
-- Any intermediate steps shown
+You MUST extract every single number, variable, and equation visible — do not skip any line.
+
+Common variables you will see in electrochemistry calculations:
+- J = current density (mA/cm²)
+- Q = charge (Coulombs, C) — calculated as I × t
+- n = moles — calculated as Q / (z × F) where F = 96485 C/mol
+- mass = n × molar_mass (e.g. 6.94 g/mol for Li)
+- t = time in seconds
+- I = current in amps (A) or milliamps (mA)
+
+Critical rules:
+- Scientific notation appears as "1.5E-4" or "8.4 E-6" — always include the exponent
+- Superscripts: cm² not cm2, Li⁺ not Li+
+- If you see a fraction written vertically, write it as numerator/denominator
+- Extract EVERY intermediate step, not just the final answer
+- If a line shows "X = [calculation] = [result]", extract all three parts
 
 Return as JSON:
 {
   "equations": [
     {
-      "expression": "...",
-      "result": "...",
-      "result_units": "...",
-      "notes": "..."
+      "expression": "full equation as written",
+      "result": "numerical result",
+      "result_units": "units of result",
+      "variable": "single letter variable name if present"
     }
   ],
-  "variables_defined": {"variable": "value with units"},
-  "uncertainties": ["anything you're not sure about"]
+  "variables_defined": {
+    "J": "0.50 mA/cm²",
+    "Q": "0.81 C",
+    "n": "8.4E-6 mol",
+    "t": "5400 s"
+  },
+  "uncertainties": ["anything you could not read clearly"]
 }""",
 
     ZoneType.TABLE: """This is a data table from a handwritten chemistry lab notebook.
-Extract the COMPLETE table preserving the exact structure:
-- Column headers (exactly as written, with units)
-- Every row of data
-- Any observations or notes in the rightmost columns
-- Watch for merged cells or multi-line entries
+You MUST extract every single row — tables in lab notebooks typically have 4-8 rows of data.
+Do not stop after 2 rows. Read the entire table from top to bottom.
+
+This table likely shows temperature measurements over time with observations.
+Expected structure:
+- Column 1: time (0 min, 1 min, 5 min, 10 min, 20 min, 40 min, 1 hr, 1 hr 30 min...)
+- Column 2: temperature in °C
+- Column 3: more time points
+- Column 4: more temperatures
+- Column 5 (rightmost): written observations about the experiment
+
+For the observations column, extract the EXACT text including:
+- XRD peak positions written as "2θ = X.X°"
+- Visual descriptions ("grey", "dull", "shiny")
+- Any shoulder peaks or secondary features
 
 Return as JSON:
 {
-  "headers": ["col1", "col2", "..."],
+  "headers": ["col1", "col2", "col3", "col4", "observations"],
   "rows": [
-    ["val1", "val2", "..."],
-    ...
+    ["0 min", "22.4°C", "20 min", "30.1°C", "Film looks grey and dull"],
+    ["1 min", "23.1°C", "40 min", "31.5°C", "XRD min peak at 2θ = 2.1°"],
+    ...extract ALL rows you can see...
   ],
-  "units": {"col1": "unit", "col2": "unit"},
-  "notes_column": ["observation1", "observation2", "..."],
-  "uncertainties": ["anything you're not sure about"]
+  "total_rows_found": <count all rows including ones hard to read>,
+  "uncertainties": ["rows or values you could not read clearly"]
 }""",
 
     ZoneType.STRUCTURE: """This is a chemical structure region from a handwritten chemistry lab notebook.

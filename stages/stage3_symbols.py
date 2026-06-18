@@ -113,8 +113,35 @@ XRD_RULES = [
     (r'\(low\s+int(?:ens?\.?|ensity)?\)', '(low intensity)'),
 ]
 
-# All rules in application order
+# OCR confusion fixes — must run BEFORE other rules
+# Vision models confuse: O/0, l/1, S/5, I/1
+# Use a lambda for numeric-string fixes to handle multiple simultaneous confusions
+import re as _re
+
+def _fix_decimal(m):
+    """Fix O->0 and S->5 in a decimal number string like O.SO -> 0.50"""
+    s = m.group(0)
+# OCR confusion fixes — must run BEFORE other rules
+# Vision models confuse: O/0, l/1, S/5, I/1
+
+def _fix_decimal(m):
+    """Fix O->0 and S->5 in a decimal number string like O.SO -> 0.50"""
+    return m.group(0).replace('O', '0').replace('S', '5')
+
+OCR_FIX_RULES = [
+    (r'[OS][.][0-9OS]+', _fix_decimal),    # O.SO->0.50, O.45->0.45
+    (r'(?<=\d)O(?=\d)', '0'),              # 1O5 -> 105
+    (r'<\s*l\s*ppm', '< 1 ppm'),           # < l ppm -> < 1 ppm
+    (r'\blM\b', '1M'),                     # lM -> 1M (before space rule)
+    (r'\bl\s+M\b', '1 M'),                 # l M -> 1 M
+    (r'\bS\s*mol\s*%', '5 mol%'),          # S mol% -> 5 mol%
+    (r'\bS%', '5%'),                       # S% -> 5%
+    (r'(\d{6}-[A-Z]+)I\b', r'\g<1>1'),     # 240604-BI -> 240604-B1
+]
+
+# All rules in application order — OCR fixes first
 ALL_RULES = (
+    OCR_FIX_RULES +
     SCIENTIFIC_NOTATION_RULES +
     DEGREE_RULES +
     GREEK_RULES +
