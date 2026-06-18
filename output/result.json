@@ -1,1 +1,87 @@
-
+{
+  "metadata": {
+    "page": 57,
+    "date": "June 4",
+    "project": "Li electrodeposition - g'lyme electrolytes",
+    "run_id": "240604-BI",
+    "continued_from": null
+  },
+  "goal": "Screen electrolyte 290604-B for stable Li plating",
+  "electrolyte": {
+    "salt": "IM LiTFSI",
+    "solvent": "diglyme diisoprolyl ether : EtOH (4:1 v/v)",
+    "additive": "S% Smol% 12-crown-4 as additive.",
+    "volume_mL": 20,
+    "preparation_notes": "Stir 20min → T@22.9°C, glovebox H₂O < l ppm"
+  },
+  "conditions": {
+    "temperature_C": 22.9,
+    "atmosphere": "glovebox",
+    "water_ppm": "<l ppm",
+    "other": null
+  },
+  "electrodes": {
+    "working": "glassy C RDE (0.3cm²)",
+    "counter": "Li foil",
+    "reference": "Ag/AgCl"
+  },
+  "deposition": {
+    "potential_V": -0.45,
+    "reference": "Ag/AgCl",
+    "duration_min": 90,
+    "duration_s": null,
+    "rotation_rpm": 1600,
+    "current_density_mA_cm2": "O.SO?",
+    "electrode_area_cm2": 0.3,
+    "current_A": null,
+    "charge_C": null,
+    "moles_deposited": null,
+    "mass_deposited_g": null
+  },
+  "chemical_structures": [
+    {
+      "label": "[Li (12-crown-4)]¹⁺",
+      "type": "complex",
+      "description": "A molecular structure with a lithium ion (Li⁺) and two crown ether rings.",
+      "role": null
+    }
+  ],
+  "reactions": [],
+  "observations": {
+    "visual": null,
+    "xrd": {
+      "peaks": [
+        31.5
+      ],
+      "notes": null
+    },
+    "other": [
+      "Film looks grey & dull"
+    ]
+  },
+  "temperature_profile": [
+    {
+      "time": "0 min",
+      "temp_C": 22.4
+    },
+    {
+      "time": "20 min",
+      "temp_C": 30.1
+    }
+  ],
+  "extraction_quality": {
+    "zones_extracted": 11,
+    "zones_successful": 11,
+    "confidence": "high",
+    "uncertain_fields": [
+      "J = O.SO mA/cm² and, 0.3 cm²",
+      "T@22.9°C, glovebox H₂O < l ppm"
+    ]
+  },
+  "_pipeline_meta": {
+    "image_path": "/Users/madhupriyapulletikurthi/Downloads/Example_Lab_Notebook_Page.jpg",
+    "vision_model": "minicpm-v",
+    "text_model": "mistral-nemo:latest",
+    "elapsed_seconds": 481.9
+  }
+}
