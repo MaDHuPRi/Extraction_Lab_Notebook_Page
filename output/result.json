@@ -1,24 +1,24 @@
 {
   "metadata": {
     "page": 57,
-    "date": "June 4",
+    "date": null,
     "project": "Li electrodeposition - g'lyme electrolytes",
-    "run_id": "240604-BI",
-    "continued_from": null
+    "run_id": "240604-B1",
+    "continued_from": "p3_56"
   },
   "goal": "Screen electrolyte 290604-B for stable Li plating",
   "electrolyte": {
     "salt": "IM LiTFSI",
-    "solvent": "diglyme diisoprolyl ether : EtOH (4:1 v/v)",
-    "additive": "S% Smol% 12-crown-4 as additive.",
-    "volume_mL": 20,
-    "preparation_notes": "Stir 20min → T@22.9°C, glovebox H₂O < l ppm"
+    "solvent": "diglyme (4:1 v/v) with EtOH",
+    "additive": "12-crown-4 (5 mol%) as additive",
+    "volume_mL": 20.0,
+    "preparation_notes": "Stir for 20 min, glovebox H2O < 1 ppm"
   },
   "conditions": {
-    "temperature_C": 22.9,
+    "temperature_C": 22.4,
     "atmosphere": "glovebox",
-    "water_ppm": "<l ppm",
-    "other": null
+    "water_ppm": "< 1",
+    "other": ""
   },
   "electrodes": {
     "working": "glassy C RDE (0.3cm²)",
@@ -28,10 +28,10 @@
   "deposition": {
     "potential_V": -0.45,
     "reference": "Ag/AgCl",
-    "duration_min": 90,
+    "duration_min": 90.0,
     "duration_s": null,
-    "rotation_rpm": 1600,
-    "current_density_mA_cm2": "O.SO?",
+    "rotation_rpm": 1600.0,
+    "current_density_mA_cm2": 0.5,
     "electrode_area_cm2": 0.3,
     "current_A": null,
     "charge_C": null,
@@ -40,23 +40,29 @@
   },
   "chemical_structures": [
     {
-      "label": "[Li (12-crown-4)]¹⁺",
-      "type": "complex",
-      "description": "A molecular structure with a lithium ion (Li⁺) and two crown ether rings.",
-      "role": null
+      "label": "[Li (12-crown-4)]^+",
+      "type": "ion",
+      "description": "Lithium ion with [12-crown-4]⁴⁻ complex.",
+      "smiles": null,
+      "role": "reactant"
     }
   ],
-  "reactions": [],
+  "reactions": [
+    {
+      "equation": "[Li (12-crown-4)]^+ → F⁻ + S-N=S",
+      "conditions": "potential: -0.45V, temperature: 22.4°C"
+    }
+  ],
   "observations": {
-    "visual": null,
+    "visual": "Film looks grey and dull at 30.1°C, shiny and bright at 47.5°C.",
     "xrd": {
       "peaks": [
-        31.5
+        2.01
       ],
-      "notes": null
+      "notes": "XRD min peak at 2θ = 2°"
     },
     "other": [
-      "Film looks grey & dull"
+      "Shoulder at θ = 4.7°"
     ]
   },
   "temperature_profile": [
@@ -67,21 +73,38 @@
     {
       "time": "20 min",
       "temp_C": 30.1
+    },
+    {
+      "time": "40 min",
+      "temp_C": 31.5
+    },
+    {
+      "time": "90 min",
+      "temp_C": 36.8
     }
   ],
+  "procedure_summary": "Prepared IM LiTFSI in diglyme with EtOH, added 12-crown-4 as additive. Deposited Li on glassy C RDE at -0.45V for 90 min.",
+  "experiment_interpretation": {
+    "what_was_tested": "Stability of Li plating using IM LiTFSI in diglyme",
+    "key_finding": "Li plating is stable up to 30°C, but film becomes dull and grey at higher temperatures.",
+    "next_steps_implied": "Investigate effects of temperature on film properties"
+  },
   "extraction_quality": {
     "zones_extracted": 11,
     "zones_successful": 11,
     "confidence": "high",
     "uncertain_fields": [
-      "J = O.SO mA/cm² and, 0.3 cm²",
-      "T@22.9°C, glovebox H₂O < l ppm"
-    ]
+      "XRD peak values",
+      "charge and moles deposited"
+    ],
+    "assembly_failed": null
   },
   "_pipeline_meta": {
     "image_path": "/Users/madhupriyapulletikurthi/Downloads/Example_Lab_Notebook_Page.jpg",
     "vision_model": "minicpm-v",
-    "text_model": "mistral-nemo:latest",
-    "elapsed_seconds": 481.9
+    "text_model": "llama3.2:latest",
+    "elapsed_seconds": 421.9,
+    "completion_score": 0.8,
+    "validation_errors": []
   }
 }

@@ -45,6 +45,13 @@ Rules:
 ASSEMBLY_PROMPT_TEMPLATE = """Below are the extracted contents of each region of a handwritten chemistry lab notebook page.
 Synthesize these into a single structured experiment record.
 
+CRITICAL INSTRUCTIONS:
+1. MATH zones → variables_defined: Q=charge_C, n=moles_deposited, mass=mass_deposited_g, J=current_density_mA_cm2
+2. TABLE zones → extract ALL rows (6-8 expected). XRD peaks are 2-10 degrees, not temperatures.
+3. Solvent: "diglyme" = diethylene glycol dimethyl ether. Never write "diisoprolyl ether".
+4. procedure_summary: 2-3 sentences — what was prepared, what was run, what was observed.
+5. experiment_interpretation: what_was_tested, key_finding, next_steps_implied.
+
 === EXTRACTED ZONE DATA ===
 {zone_data}
 
@@ -116,6 +123,12 @@ Return a JSON object with these fields (omit fields where data is absent):
   "temperature_profile": [
     {{"time": "<time string>", "temp_C": <number>}}
   ],
+  "procedure_summary": "A 2-3 sentence narrative of what was done: what was prepared, what experiment was run, and what was observed. Written as a scientist would describe it.",
+  "experiment_interpretation": {{
+    "what_was_tested": "one sentence",
+    "key_finding": "one sentence describing the main result",
+    "next_steps_implied": "what the data suggests should happen next"
+  }},
   "extraction_quality": {{
     "zones_extracted": <total zones>,
     "zones_successful": <zones with no errors>,
@@ -147,10 +160,11 @@ def format_zones_for_assembly(zones: List[Zone]) -> str:
 
         if error:
             # If parsing failed, include the raw response so LLM can still try
-            lines.append(f"[Parse failed, raw text follows]")
-            lines.append(raw[:2000] if raw else "[empty]")
+            lines.append("[Parse failed, raw text follows]")
+            lines.append(raw[:500] if raw else "[empty]")
         else:
-            lines.append(json.dumps(result, indent=2, ensure_ascii=False))
+            zone_str = json.dumps(result, indent=2, ensure_ascii=False)
+            lines.append(zone_str[:1500] if len(zone_str) > 1500 else zone_str)
 
     return '\n'.join(lines)
 

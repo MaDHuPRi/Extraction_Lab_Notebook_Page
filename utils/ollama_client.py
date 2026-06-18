@@ -23,7 +23,7 @@ class OllamaClient:
     def __init__(self,
                  base_url: str = "http://localhost:11434",
                  vision_timeout: int = 300,   # 5 min — minicpm-v needs time
-                 text_timeout: int = 120):
+                 text_timeout: int = 300):
         self.base_url = base_url.rstrip('/')
         self.vision_timeout = vision_timeout
         self.text_timeout = text_timeout
